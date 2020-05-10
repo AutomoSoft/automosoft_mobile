@@ -10,8 +10,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+      
       theme: ThemeData(
-        
+        fontFamily: "Comic",
         primaryColorDark:  Color.fromRGBO(194, 132, 0, 0.9),
         primarySwatch: Colors.amber
       ),

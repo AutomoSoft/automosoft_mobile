@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:async';
+
 import 'package:automosoft_mobile/app_screen/forman/homePage.dart';
 import 'package:flutter/material.dart';
-
+import "package:http/http.dart" as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -29,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
     
-      body:Stack(children: <Widget>[
+       body:Stack(children: <Widget>[
          Container(
            width: double.infinity,
         decoration: BoxDecoration(
@@ -46,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
              image:AssetImage('assets/images/logo.png') 
              ),
         ),
-      child:  Column(
+        child:  Column(
                   
                  crossAxisAlignment: CrossAxisAlignment.center,
              mainAxisAlignment: MainAxisAlignment.center,
@@ -147,7 +151,15 @@ class _LoginPageState extends State<LoginPage> {
                         
                    
                   ),
-                  FlatButton(onPressed: (){}, child: Text("Forgot password?",style:TextStyle(color:Colors.black,fontSize:20,fontFamily:"Comic",fontWeight: FontWeight.bold),)),
+                  FlatButton(onPressed: (){}, child: Text("Forgot password?",
+                  style:TextStyle(
+                    color:Colors.black,
+                    fontSize:20,
+                    fontFamily:"Comic",
+                    fontWeight: FontWeight.bold
+                    ),
+                  )
+                  ),
 
                    SizedBox(height:20),
                    Container(
@@ -157,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
             child :RaisedButton(
                  
                     child: Text(" Login ",style:TextStyle(fontSize:25,fontFamily:"Comic",fontWeight: FontWeight.bold),),
-                    onPressed: ()=>_login(),
+                    onPressed: ()=>_login(_userNameController.text,_passwordController.text),
                     color: Color.fromRGBO(45, 99, 54, 1),
                     textColor: Colors.white,
                     splashColor: Colors.grey,
@@ -181,12 +193,68 @@ class _LoginPageState extends State<LoginPage> {
      
     );
   }
- Future<void>  _login()async{
+  Future<void> _login(String userName, String pass)async{
+      // SharedPreferences sharedPreferences =await SharedPreferences.getInstance();
+     
      if(_formKey.currentState.validate()){
-         
+       // 
+       Map data={
+          "userName":userName,
+          "password":pass,
+       };
+      // print(data["userName"]);
+       var jsonResponse=null;
+       var response=await http.post("http://192.168.1.102:3000/mobileUser/signIn",body:data);
+       jsonResponse=json.decode(response.body);
+       if(jsonResponse !=null){
+     
+           setState(() {
+             
+           });
+           //sharedPreferences.setString('token', jsonResponse['token']);
+          // print("Response stautus:${response.statusCode}");
+          // print("Respose body:${response.body}");
+           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage(userName: _userNameController.text,)));
+       }
+         else {
+           print("else");
+             final snackBar = SnackBar(
+             
+             content: Container(
+               height: 30,
+               alignment: Alignment.center,
+               child: Row(
+                 children:<Widget>[
+                        Icon(Icons.error,color:Colors.red),
+                        Text("username and password is incorrect!", style: TextStyle(color:Colors.red),)
+                 ]
+               ),
+             ),
+              action: SnackBarAction(
+              label: 'ok',
+               onPressed: () {
+     
+              },
+                  ),
+           );
+             Scaffold.of(context).showSnackBar(snackBar);
+
+       }
+       
+            
           
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage(userName: _userNameController.text,)));
      }
+  }
+  Widget snakBar(){
+     final snackBar=SnackBar(
+            content: Text("UserName and Password Incorrect"),
+            action: SnackBarAction(label:"Ok", onPressed:(){
+
+            },
+            ),
+            
+            );
+            Scaffold.of(context).showSnackBar(snackBar);
   }
 }
 

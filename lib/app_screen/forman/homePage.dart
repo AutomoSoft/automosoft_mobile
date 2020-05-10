@@ -21,6 +21,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+    
+   
   String username;
    static bool  jobCard=false;
   _HomePageState(String userName){
@@ -66,13 +68,13 @@ class _HomePageState extends State<HomePage> {
                        ),
                     ListTile(
                       leading: Icon(Icons.person),
-                      title:Text(username),
+                      title:Text(username,style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                       
 
                       ),
                       ListTile(
                               leading: Icon(Icons.add),
-                             title:Text("Add Job card"),
+                             title:Text("Add Job card",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                              onTap: (){
                                 setState(() {
                                   jobCard=true;
@@ -82,10 +84,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                        ListTile(
                               leading: Icon(Icons.input),
-                             title:Text("Log out"),
+                             title:Text("Log out",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                              onTap: (){
-                                 logout();
-                               Navigator.pop(context);
+                                 _logout();
+                              
                              },
                       )
                      ],
@@ -147,10 +149,8 @@ class _HomePageState extends State<HomePage> {
            ),  
     );
   }
-  Future<void> logout ()async{
+  _logout ()async{
       
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (c) => LoginPage()),
-                    (r) => false);
-  }
+            await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>LoginPage()), (r)=>false);
+ }
  }
