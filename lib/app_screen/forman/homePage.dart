@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       ListTile(
                               leading: Icon(Icons.add),
-                             title:Text("Add Job card",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                             title:Text("Job card",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                              onTap: (){
                                 setState(() {
                                   jobCard=true;
