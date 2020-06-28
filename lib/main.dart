@@ -1,7 +1,11 @@
 import 'package:automosoft_mobile/app_auth/loginPage.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+
+void main() async{
+    
+   runApp(MyApp());
+   }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:automosoft_mobile/app_screen/customer/homePage.dart';
 import 'package:automosoft_mobile/app_screen/forman/homePage.dart';
+import 'package:automosoft_mobile/constant.dart';
 import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -18,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _userNameController= TextEditingController();
   TextEditingController _passwordController= TextEditingController();
   bool _passwordVisble=true;
+  bool _isLogin=true;
   FocusNode _node;
   @override
   void initState() {
@@ -162,21 +165,24 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                    SizedBox(height:20),
+
                    Container(
             width: 350,
             height: 50.0,
             
-            child :RaisedButton(
+            child :
+            RaisedButton(
                  
                     child: Text(" Login ",style:TextStyle(fontSize:25,fontFamily:"Comic",fontWeight: FontWeight.bold),),
-                    onPressed: ()=>_login(_userNameController.text,_passwordController.text),
+                    onPressed: ()=>  _login(_userNameController.text,_passwordController.text) ,
                     color: Color.fromRGBO(45, 99, 54, 1),
                     textColor: Colors.white,
                     splashColor: Colors.grey,
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                     
                   )
-            )
+            ),
+             
                   
                  
                  
@@ -193,68 +199,75 @@ class _LoginPageState extends State<LoginPage> {
      
     );
   }
-  Future<void> _login(String userName, String pass)async{
-      // SharedPreferences sharedPreferences =await SharedPreferences.getInstance();
-     
-     if(_formKey.currentState.validate()){
-       // 
+ 
+    Future<void> _login(String userName, String pass)async{
+      if(_formKey.currentState.validate()){
+       
        Map data={
-          "userName":userName,
+          "userid":userName,
           "password":pass,
        };
-      // print(data["userName"]);
-       var jsonResponse=null;
-       var response=await http.post("http://192.168.1.102:3000/mobileUser/signIn",body:data);
-       jsonResponse=json.decode(response.body);
-       if(jsonResponse !=null){
-     
-           setState(() {
-             
-           });
-           //sharedPreferences.setString('token', jsonResponse['token']);
-          // print("Response stautus:${response.statusCode}");
-          // print("Respose body:${response.body}");
-           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage(userName: _userNameController.text,)));
-       }
-         else {
-           print("else");
-             final snackBar = SnackBar(
-             
-             content: Container(
-               height: 30,
-               alignment: Alignment.center,
-               child: Row(
-                 children:<Widget>[
-                        Icon(Icons.error,color:Colors.red),
-                        Text("username and password is incorrect!", style: TextStyle(color:Colors.red),)
-                 ]
-               ),
-             ),
-              action: SnackBarAction(
-              label: 'ok',
-               onPressed: () {
-     
-              },
-                  ),
-           );
-             Scaffold.of(context).showSnackBar(snackBar);
-
-       }
-       
+        return await http.
+        post("http://${Ip.ip}:3000/mobile/login",body:data).
+         then(( http.Response res ){
+            var userData=json.decode(res.body);
+            print(userData['state']);
             
-          
-     }
-  }
-  Widget snakBar(){
-     final snackBar=SnackBar(
-            content: Text("UserName and Password Incorrect"),
-            action: SnackBarAction(label:"Ok", onPressed:(){
-
-            },
-            ),
+           
+            bool state=userData['state'];
+            if(state==true){
+               String usertype=userData['user']['usertype'];
+               String fname=userData['user']['firstname'];
+               String lname=userData['user']['lastname'];
+               String name="${fname}" "${lname}";
+             
+               if(usertype=="Foreman"){
+                 setState(() {
+                    _isLogin=true;
+                 });
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage(userName:name,)));
+            }
+            else if( usertype=="Customer"){
+               setState(() {
+                    _isLogin=true;
+                 });
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CustomerHome(userName: _userNameController.text,)));
+            }
+             
+            }
+            else{
+              
+              }
             
-            );
-            Scaffold.of(context).showSnackBar(snackBar);
+
+            
+            
+           
+            
+         });
+        
+        
+               
+               }
+        
+            }
+            void loginfail(BuildContext context) {
+              print(_isLogin);
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+        content: Text('Hello from the default snackbar'),
+        action: SnackBarAction(
+          label: 'Click Me',
+          onPressed: () {},
+        ),
+      ),
+    );
   }
-}
+          // Widget snakBar(){
+          //    final snackBar=
+          //          
+          // }
+        }
+        
+
 
