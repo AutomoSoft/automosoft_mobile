@@ -24,6 +24,7 @@ class _JobCardState extends State<JobCard> {
   
    List <Technician> listModel=[];
    List <Vehicle> vehicleModel=[];
+   List vehicleDetaisl=[];
 
    String jobtype=null;
    String customer=null;
@@ -211,10 +212,13 @@ Future<List<Technician>> fetchTech(String jobtype) async{
                               onTap:(){
                                 setState(() {
                                   vehicle.checked ^=true;
+                                  if(vehicle.checked){
+                                     
+                                  }
                                   
                                 });
                               },
-                          );;
+                          );
                       })
                      
                     ) ,
@@ -257,22 +261,63 @@ Future<List<Technician>> fetchTech(String jobtype) async{
                     itemBuilder: (context, i){
                       final techician=listModel[i];
                        return
-                           ListTile(
+                          ExpansionTile(
                               title:Text(techician.userid),
-                              trailing:Icon(techician.checked? Icons.check_box: Icons.check_box_outline_blank,color:Colors.amber),
-                              subtitle: Text("CURRENT WORK STATUS:  ${techician.curr} / ${techician.cap} "),
-                              onTap:(){
-                                setState(() {
-                                  techician.checked ^=true;
-                                  if(techician.checked){
-                                    techician.curr=techician.curr+1;
+                              leading: IconButton(
+                                color:Colors.amber,
+                                icon:techician.checked? Icon(Icons.check_box, ):Icon(Icons.check_box_outline_blank),
+                               onPressed:(){
+                                  if(techician.checked==true){
+                                      setState(() {
+                                          techician.checked=false;
+                                          
+                                      });
+
                                   }
                                   else{
-                                    techician.curr=techician.curr-1;
+                                     setState(() {
+                                        techician.checked=true;
+                                     });
                                   }
+                               }),
+                              subtitle: Text("CURRENT WORK STATUS:  ${techician.curr} / ${techician.cap} "),
+                              children: <Widget>[
+                                Padding(padding:EdgeInsets.all(20),
+                                 child:  Row(
+                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    
+                                     IconButton(icon: Icon(Icons.add_circle,color:Colors.green ,size:45,), onPressed:techician.checked?(){
+                                       setState(() {
+                                         if(techician.curr<50){
+                                           techician.curr=techician.curr+10;
+                                         }
+                                       });
+                                     }:null),
+                                     IconButton(icon: Icon(Icons.cancel, color:Colors.red ,size:45), onPressed:techician.checked?(){
+                                       setState(() {
+                                         if(techician.curr>0){
+                                         techician.curr=techician.curr-10;
+                                         }
+                                       });
+                                     }:null)
+                                ],), 
+                                ),
+                              
                                   
-                                });
-                              },
+                              ],
+                              // onTap:(){
+                              //   setState(() {
+                              //     techician.checked ^=true;
+                              //     if(techician.checked){
+                              //       techician.curr=techician.curr+1;
+                              //     }
+                              //     else{
+                              //       techician.curr=techician.curr-1;
+                              //     }
+                                  
+                              //   });
+                              // },
                           );
                         
                     }
