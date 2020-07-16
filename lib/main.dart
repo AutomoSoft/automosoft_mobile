@@ -17,8 +17,8 @@ class MyApp extends StatelessWidget {
       
       theme: ThemeData(
         fontFamily: "Comic",
-        primaryColorDark:  Color.fromRGBO(194, 132, 0, 0.9),
-        primarySwatch: Colors.amber
+        primaryColorDark:  Color.fromRGBO(235, 132, 0, 0.9),
+        primarySwatch:Colors.amber,
       ),
       home: LoginPage()
     );

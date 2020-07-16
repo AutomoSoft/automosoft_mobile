@@ -9,23 +9,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rounded_date_picker/rounded_picker.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:http/http.dart'as http;
+import 'package:intl/intl.dart';
 
 class JobCard extends StatefulWidget {
+   String userId;
+    JobCard({Key key ,this.userId}):super(key:key);
+
  
 
  
 
   @override
-  _JobCardState createState() => _JobCardState();
+  _JobCardState createState() => _JobCardState(userId);
 }
 
 class _JobCardState extends State<JobCard> {
   var userids= List<String>();
-  
+  String foremanId;
+   _JobCardState(String foremanid){
+       foremanId=foremanid;
+       print(foremanId);
+   }
+    
    List <Technician> listModel=[];
    List <Vehicle> vehicleModel=[];
-   List vehicleDetaisl=[];
-
+   String vehicleDetails;
+  
+   final technicians=[];
+   List <int> techIndex=[];
+   List<int> vehicleIndexes=[];
+    int vehicleIndexe=-1;
    String jobtype=null;
    String customer=null;
 
@@ -38,6 +51,7 @@ class _JobCardState extends State<JobCard> {
      TextEditingController foremanObser=TextEditingController();
      TextEditingController  serviceChage=TextEditingController();
       DateTime  _selectday;
+      String  selectday;
      
     
     
@@ -126,7 +140,7 @@ Future<List<Technician>> fetchTech(String jobtype) async{
       
       
        _selectday=DateTime.now();
-       
+      
      }
     
 /*........................................................................*/
@@ -156,6 +170,8 @@ Future<List<Technician>> fetchTech(String jobtype) async{
                           this.jobtype=newValue;
                         });
                         fetchTech(newValue);
+                     // ignore: unnecessary_statements
+              
                   },
                   value: jobtype,
                   ),
@@ -198,7 +214,7 @@ Future<List<Technician>> fetchTech(String jobtype) async{
                   value: customer,
                   ),
                                  SizedBox(height:20),
-                 
+                  Text("SELECT VEHICLE" ,style:TextStyle(fontSize:20)),
                   SizedBox(
                       height:100,
                     child: ListView.builder(
@@ -207,14 +223,18 @@ Future<List<Technician>> fetchTech(String jobtype) async{
                         final vehicle=vehicleModel[i];
                          return  ListTile(
                               title:Text(vehicle.vehicleRegNo),
-                              trailing:Icon(vehicle.checked? Icons.check_box: Icons.check_box_outline_blank,color:Colors.amber),
-                              
+                              trailing:Icon(vehicleIndexe==i? Icons.check_box: Icons.check_box_outline_blank,color:Colors.amber),
+                            
                               onTap:(){
                                 setState(() {
                                   vehicle.checked ^=true;
                                   if(vehicle.checked){
-                                     
+                                      vehicleIndexe=i;
+                                   
+
                                   }
+                                  
+                                 
                                   
                                 });
                               },
@@ -253,7 +273,7 @@ Future<List<Technician>> fetchTech(String jobtype) async{
                     ),
                   ),
                SizedBox(height: 20,),
-               
+                  Text("ADD TECHNICIANS" ,style:TextStyle(fontSize:20)),
                 SizedBox(
                   height: 150,
                   child: ListView.builder(
@@ -271,6 +291,7 @@ Future<List<Technician>> fetchTech(String jobtype) async{
                                       setState(() {
                                           techician.checked=false;
                                           
+                                          
                                       });
 
                                   }
@@ -279,6 +300,16 @@ Future<List<Technician>> fetchTech(String jobtype) async{
                                         techician.checked=true;
                                      });
                                   }
+                                  if(techician.checked){
+                                             techIndex.add(i);
+                                           
+                                          }
+                                          else{
+                                            techIndex
+                                            .remove(i);
+                                          
+                                          }
+                                  
                                }),
                               subtitle: Text("CURRENT WORK STATUS:  ${techician.curr} / ${techician.cap} "),
                               children: <Widget>[
@@ -287,14 +318,18 @@ Future<List<Technician>> fetchTech(String jobtype) async{
                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     
-                                     IconButton(icon: Icon(Icons.add_circle,color:Colors.green ,size:45,), onPressed:techician.checked?(){
+                                     IconButton(
+                                       color:Colors.green,
+                                       icon: Icon(Icons.add_circle ,size:45,), onPressed:techician.checked?(){
                                        setState(() {
-                                         if(techician.curr<50){
+                                         if(techician.curr<techician.cap){
                                            techician.curr=techician.curr+10;
                                          }
                                        });
                                      }:null),
-                                     IconButton(icon: Icon(Icons.cancel, color:Colors.red ,size:45), onPressed:techician.checked?(){
+                                     IconButton(
+                                       color:Colors.red ,
+                                       icon: Icon(Icons.cancel, size:45), onPressed:techician.checked?(){
                                        setState(() {
                                          if(techician.curr>0){
                                          techician.curr=techician.curr-10;
@@ -339,7 +374,7 @@ Future<List<Technician>> fetchTech(String jobtype) async{
                     ),
                   ),
                SizedBox(height: 20,),
-                  RaisedButton(onPressed: (){},
+                  RaisedButton(onPressed: ()=>submit(),
                   color: Colors.green,
                        child:Container(
                       
@@ -347,7 +382,7 @@ Future<List<Technician>> fetchTech(String jobtype) async{
                         
                       
                            
-                           child: Text("Submit",textAlign:TextAlign.center,),
+                           child: Text("Add Job Card",textAlign:TextAlign.center,),
                         
                        ),
    
@@ -358,7 +393,7 @@ Future<List<Technician>> fetchTech(String jobtype) async{
             ),
        );
      }
-     /*......................................................................*/
+     /*...............................dataPicker .......................................*/
      datePicker()async{
         DateTime newDateTime = await showRoundedDatePicker(
                     context: context,
@@ -371,11 +406,88 @@ Future<List<Technician>> fetchTech(String jobtype) async{
                         if(newDateTime!=null){
                           setState(() {
                             _selectday=newDateTime;
+                            selectday=DateFormat('EEE MMM  d '  'yyyy  ').format(_selectday);
                           });
                         }
      }
    
- /*........................................................................*/    
+ /*...............................submit data .........................................*/    
+  Future<void> submit() async{
+    final addTechnicians=[];
+     addTechnicians.clear();
+     if(_formKey.currentState.validate()){
+    for(var i in techIndex){
+     
+      addTechnicians.add([listModel[i].userid ,_selectday]);
+    //  print(jsonEncode( addTechnicians));
+    }
+    
+   
+    
+   print(addTechnicians);
+        
+      vehicleDetails='{"vehicleRegNo": "${vehicleModel[vehicleIndexe].vehicleRegNo}","chasis:"${vehicleModel[vehicleIndexe].chasis}","EngineNo":"${vehicleModel[vehicleIndexe].engineNo}"}';
+    //  print(vehicleDetails);
+    
+    Map<String, dynamic> data={
+          "jobNo":jobNo.text,
+           "jobType":jobtype,
+            "custId": customer,
+           "vehicle":vehicleDetails,
+            "probCus":problemReport.text,
+            "foremanObv":foremanObser.text,
+            "technicians":addTechnicians,
+            "addedby":foremanId,
+            "addedon":DateFormat('EEE MMM  d '  'yyyy  ').format(_selectday),
+             "lastmodifiedby":"Never Modified",
+             "lastmodifiedon":DateFormat('EEE MMM  d '  'yyyy  ').format(_selectday).toString(),
+             "estCharge":serviceChage.text,
+             "jobStatus":"Queued",
+
+    };
+     print(data);
+    return await http.post("http://${Ip.ip}:3000/jobs/addNewJob",body:data)
+    .then((value){
+        var data=json.decode(value.body);
+         
+           final snackBar = SnackBar(
+           content: SizedBox(
+             height: 50,
+             child:data['state']?Text("${data["msg"]}",style:TextStyle(fontSize:20),)
+             :Text("${data["msg"]}\n check Job No ",style:TextStyle(fontSize:20,color:Colors.red),),
+           ),
+             action: SnackBarAction(
+               textColor:data['state']?Colors.amber:Colors.red,
+             label: 'ok',
+           onPressed: () {},
+  ),
+);
+              Scaffold.of(context).showSnackBar(snackBar);
+   if(data['state']){
+      //  jobNo.text="";
+      // problemReport.text="";
+      // foremanObser.text="";
+      // serviceChage.text="";
+      
+   }   
+    }
+    )
+    .catchError((error){
+      print("error");
+       print(error);
+       
+      // jobNo.text="";
+      // problemReport.text="";
+      // foremanObser.text="";
+      // serviceChage.text="";
+    }
+
+    );
+     }
+     
+
+  }
+ 
    }
    
 

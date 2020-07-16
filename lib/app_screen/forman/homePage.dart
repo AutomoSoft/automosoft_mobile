@@ -9,24 +9,34 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class HomePage extends StatefulWidget {
   String userName;
+  String userid;
  
-  HomePage({Key key,this.userName}) : super(key: key);
+  HomePage({Key key,this.userName, this.userid}) : super(key: key);
 
  
 
 
 
   @override
-  _HomePageState createState() => _HomePageState(userName);
+  _HomePageState createState() => _HomePageState(userName,userid);
 }
 
 class _HomePageState extends State<HomePage> {
-    
+  
+  
    
   String username;
+  String userId;
    static bool  jobCard=false;
-  _HomePageState(String userName){
+  _HomePageState(String userName, String userid){
      username=userName;
+     userId=userid;
+
+  }
+  @override
+  void initState() {
+  
+    super.initState();
   }
 
 
@@ -39,8 +49,9 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                    gradient:LinearGradient(
                      colors:[
-                                Color.fromRGBO(11, 29, 71, 0.9),
-                                 Color.fromRGBO(194, 132, 0, 0.9),
+                          Color.fromRGBO(235, 132, 0, 0.9),
+                           Color.fromRGBO(7, 14, 32, 0.9),
+                                
                      ] 
                    ),
                 ),
@@ -57,8 +68,8 @@ class _HomePageState extends State<HomePage> {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                 Color.fromRGBO(11, 29, 71, 0.9),
-                                 Color.fromRGBO(194, 132, 0, 0.9),
+                                  Color.fromRGBO(235, 132, 0, 0.9),
+                                     Color.fromRGBO(7, 14, 32, 0.9),
                               ]
                               ),
                            image:DecorationImage(
@@ -69,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                     ListTile(
                       leading: Icon(Icons.person),
                       title:Text(username,style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                      
+                       onTap:(){},
 
                       ),
                       ListTile(
@@ -100,7 +111,7 @@ class _HomePageState extends State<HomePage> {
              children: <Widget>[
                
                SizedBox(height: 20,),
-              jobCard?JobCard():Text(""),
+              jobCard?JobCard(userId: userId,):Text(""),
          
               
                 

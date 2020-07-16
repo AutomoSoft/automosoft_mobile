@@ -17,11 +17,15 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey=GlobalKey<FormState>();
+   
   TextEditingController _userNameController= TextEditingController();
   TextEditingController _passwordController= TextEditingController();
   bool _passwordVisble=true;
   bool _isLogin=true;
+  String userNotFound;
   FocusNode _node;
+
+  
   @override
   void initState() {
      _node=FocusNode();
@@ -35,15 +39,17 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    
+          
        body:Stack(children: <Widget>[
          Container(
+              
            width: double.infinity,
         decoration: BoxDecoration(
          gradient: LinearGradient(
            colors:[
-             Color.fromRGBO(11, 29, 71, 0.9),
-             Color.fromRGBO(194, 132, 0, 0.9),
+            
+             Color.fromRGBO(235, 132, 0, 0.9),
+              Color.fromRGBO(7, 14, 32, 0.9),
            ],
          
            ),
@@ -54,10 +60,11 @@ class _LoginPageState extends State<LoginPage> {
              ),
         ),
         child:  Column(
-                  
+                    
                  crossAxisAlignment: CrossAxisAlignment.center,
              mainAxisAlignment: MainAxisAlignment.center,
             children:<Widget>[
+                   
               SizedBox(
                 height: 120,
               ),
@@ -154,17 +161,17 @@ class _LoginPageState extends State<LoginPage> {
                         
                    
                   ),
-                  FlatButton(onPressed: (){}, child: Text("Forgot password?",
-                  style:TextStyle(
-                    color:Colors.black,
-                    fontSize:20,
-                    fontFamily:"Comic",
-                    fontWeight: FontWeight.bold
-                    ),
-                  )
-                  ),
+                  // FlatButton(onPressed: (){}, child: Text("Forgot password?",
+                  // style:TextStyle(
+                  //   color:Colors.black,
+                  //   fontSize:20,
+                  //   fontFamily:"Comic",
+                  //   fontWeight: FontWeight.bold
+                  //   ),
+                  // )
+                  // ),
 
-                   SizedBox(height:20),
+                   SizedBox(height:40),
 
                    Container(
             width: 350,
@@ -183,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
                   )
             ),
              
-                  
+                
                  
                  
                       ],),
@@ -199,9 +206,32 @@ class _LoginPageState extends State<LoginPage> {
      
     );
   }
- 
+ void showAleart(String msg){
+  
+      showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return AlertDialog(
+            backgroundColor: Colors.black,
+             title: new Text("$msg" ,style:TextStyle(color:Colors.red)),
+          content: new Text("Enter Registered User Id and password ",style:TextStyle(color:Colors.red)),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("OK",style:TextStyle(color:Colors.red)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+          );
+        }
+        );
+         
+  
+ }
     Future<void> _login(String userName, String pass)async{
-      if(_formKey.currentState.validate()){
+      if(_formKey.currentState.validate()) {
        
        Map data={
           "userid":userName,
@@ -211,39 +241,46 @@ class _LoginPageState extends State<LoginPage> {
         post("http://${Ip.ip}:3000/mobile/login",body:data).
          then(( http.Response res ){
             var userData=json.decode(res.body);
-            print(userData['state']);
-            
+          // print(userData['msg']);
+            userNotFound=userData['msg'];
+           print(userData['state']);
            
             bool state=userData['state'];
-            if(state==true){
+            if (state==false){
+              showAleart(userNotFound);
+                
+               
+              }
+              
+           else {
                String usertype=userData['user']['usertype'];
                String fname=userData['user']['firstname'];
                String lname=userData['user']['lastname'];
-               String name="${fname}" "${lname}";
+               String name="${fname} ${lname}";
              
                if(usertype=="Foreman"){
                  setState(() {
                     _isLogin=true;
                  });
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage(userName:name,)));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage(userName:name, userid:userName,)));
             }
             else if( usertype=="Customer"){
                setState(() {
                     _isLogin=true;
                  });
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CustomerHome(userName: _userNameController.text,)));
-            }
-             
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CustomerHome(userName:name,userId:userName)));
             }
             else{
-              
-              }
+          
+               showAleart(userNotFound);
+            }
+             
+            }          
             
-
-            
-            
+         }).catchError((onError){
+           print("sdjflsdkjflk");
+           print(onError);
            
-            
          });
         
         
@@ -251,18 +288,7 @@ class _LoginPageState extends State<LoginPage> {
                }
         
             }
-            void loginfail(BuildContext context) {
-              print(_isLogin);
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-        content: Text('Hello from the default snackbar'),
-        action: SnackBarAction(
-          label: 'Click Me',
-          onPressed: () {},
-        ),
-      ),
-    );
-  }
+         
           // Widget snakBar(){
           //    final snackBar=
           //          
