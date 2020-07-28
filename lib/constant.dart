@@ -1,5 +1,5 @@
 class Ip{
   
-   static String ip="192.168.1.101";
+   static String ip="192.168.1.105";
    
 }

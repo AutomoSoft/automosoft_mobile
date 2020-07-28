@@ -1,5 +1,6 @@
 
 import 'package:automosoft_mobile/app_auth/loginPage.dart';
+import 'package:automosoft_mobile/app_screen/customer/makeReservation.dart';
 import 'package:flutter/material.dart';
 
 class CustomerHome extends StatefulWidget {
@@ -46,13 +47,17 @@ class _CustomerHomeState extends State<CustomerHome> {
                 ListTile(
                       leading: Icon(Icons.person),
                       title:Text(username,style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                       onTap:(){},
+                       onTap:(){
+
+                       },
 
                       ),
                       ListTile(
                       leading: Icon(Icons.add_box),
                       title:Text("Make Reservation",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                       onTap:(){},
+                       onTap:(){
+                         makeResrvation();
+                       },
 
                       ),
                       ListTile(
@@ -94,7 +99,7 @@ class _CustomerHomeState extends State<CustomerHome> {
         child:InkWell(
              splashColor: Colors.amber.withAlpha(50),
         onTap: () {
-            print('Card tapped.');
+            makeResrvation();
         },
         child: Container(
              margin: EdgeInsets.all(20),
@@ -186,5 +191,8 @@ class _CustomerHomeState extends State<CustomerHome> {
     _logout ()async{
       
             await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>LoginPage()), (r)=>false);
+ }
+ makeResrvation () async{
+    await Navigator.push(context,MaterialPageRoute(builder: (context)=> MakeReservation() ),);
  }
 }
