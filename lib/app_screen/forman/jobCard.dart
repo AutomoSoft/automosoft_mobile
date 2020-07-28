@@ -42,7 +42,7 @@ class _JobCardState extends State<JobCard> {
    String jobtype=null;
    String customer=null;
 
-   var jobType=["Paint Job","Accident Repair","Valuation","Other"];
+   var jobType=["Paint Job","Accident Repair","Vehicle Valuation","Other"];
    
    
     final _formKey=GlobalKey<FormState>();
