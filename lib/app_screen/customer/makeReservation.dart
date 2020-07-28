@@ -58,7 +58,7 @@ class _MakeReservationState extends State<MakeReservation> {
   Widget build(BuildContext context) {
     return Scaffold(
            
-          appBar: AppBar(title:Text("Make Resrvation")),
+          appBar: AppBar(title:Text("MAKE  RESERVATION ")),
           body: Padding(
                padding: EdgeInsets.all(30),
                       child: Container(
@@ -70,6 +70,7 @@ class _MakeReservationState extends State<MakeReservation> {
                     child:Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:<Widget>[
+                      
                          Container(
                            margin: EdgeInsets.all(0),
                            height: 300.0,
@@ -82,7 +83,7 @@ class _MakeReservationState extends State<MakeReservation> {
         ),
                          ),
                           SizedBox(height:10),
-                        Text("Choose a Date"),
+                        Text("Choose a Date",style: TextStyle(fontSize:20.0,color:Colors.grey),),
                         SizedBox(height:10),
                           ListTile(
                              leading: Icon(Icons.calendar_today),
@@ -90,7 +91,7 @@ class _MakeReservationState extends State<MakeReservation> {
                              onTap:()=>datePicker(),
                           ) ,
                           SizedBox(height:30),
-                            Text("Choose a Time"),
+                            Text("Choose a Time",style: TextStyle(fontSize:20.0,color:Colors.grey),),
                              SizedBox(height:10),
                           ListTile(
                             
@@ -99,7 +100,7 @@ class _MakeReservationState extends State<MakeReservation> {
                             onTap: ()=>timePicker(),
                           ),  
                           SizedBox(height:30),
-                           Text("Job Type"),
+                           Text("Job Type",style: TextStyle(fontSize:20.0,color:Colors.grey),),
                             SizedBox(height:10),
                           DropdownButton<String>(
                             isExpanded: true, 
@@ -119,7 +120,7 @@ class _MakeReservationState extends State<MakeReservation> {
                         
 
                            SizedBox(height:30),
-                           Text("Problem brief"),
+                           Text("Problem brief",style: TextStyle(fontSize:20.0,color:Colors.grey),),
                             SizedBox(height:10),
                          TextFormField(
                            controller: problem,
