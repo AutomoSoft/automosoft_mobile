@@ -6,10 +6,11 @@ import 'package:flutter_rounded_date_picker/rounded_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 class MakeReservation extends StatefulWidget {
-  MakeReservation({Key key}) : super(key: key);
+  final String userId;
+  MakeReservation({Key key, this.userId}) : super(key: key);
 
   @override
-  _MakeReservationState createState() => _MakeReservationState();
+  _MakeReservationState createState() => _MakeReservationState(userId);
 }
 
 class _MakeReservationState extends State<MakeReservation> {
@@ -19,6 +20,10 @@ class _MakeReservationState extends State<MakeReservation> {
       String jobtype;
       TimeOfDay _selectTime;
        TextEditingController problem;
+       String userid;
+       _MakeReservationState(String userId){
+         userid=userId;
+       }
        var jobType=["Paint Job","Accident Repair","Vehicle Valuation","Full Service","Other"];
   @override
   void initState() {
@@ -58,7 +63,7 @@ class _MakeReservationState extends State<MakeReservation> {
   Widget build(BuildContext context) {
     return Scaffold(
            
-          appBar: AppBar(title:Text("MAKE  RESERVATION ")),
+          appBar: AppBar(title:Text(" MAKE  RESERVATION ")),
           body: Padding(
                padding: EdgeInsets.all(30),
                       child: Container(
