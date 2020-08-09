@@ -60,26 +60,26 @@ class _CustomerHomeState extends State<CustomerHome> {
                        },
 
                       ),
-                      ListTile(
-                      leading: Icon(Icons.assessment),
-                      title:Text("Job History",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                       onTap:(){},
+                      // ListTile(
+                      // leading: Icon(Icons.assessment),
+                      // title:Text("Job History",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                      //  onTap:(){},
 
-                      ),
-                      ListTile(
-                      leading: Icon(Icons.assignment),
-                      title:Text("My Services",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                       onTap:(){},
+                      // ),
+                      // ListTile(
+                      // leading: Icon(Icons.assignment),
+                      // title:Text("My Services",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                      //  onTap:(){},
 
-                      ),
-                      ListTile(
-                              leading: Icon(Icons.input),
-                             title:Text("Log out",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                             onTap: (){
-                                 _logout();
+                      // ),
+                      // ListTile(
+                      //         leading: Icon(Icons.input),
+                      //        title:Text("Log out",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                      //        onTap: (){
+                      //            _logout();
                               
-                             },
-                      )
+                      //        },
+                      // )
           ],
         ),
       ),
@@ -120,68 +120,68 @@ class _CustomerHomeState extends State<CustomerHome> {
       
         )
            ),
-            Card(
-               shadowColor:Color.fromRGBO(192, 192, 192, 0.5),
-              margin: EdgeInsets.all(20),
-              shape:RoundedRectangleBorder(
-                 borderRadius:BorderRadius.circular(12)
-              ), 
-            color: Color.fromRGBO(7, 14, 32, 0.9),
-        child:InkWell(
-             splashColor: Colors.amber.withAlpha(50),
-        onTap: () {
-            print('Card tapped.');
-        },
-        child: Container(
-             margin: EdgeInsets.all(20),
-             decoration: BoxDecoration(
-              border: Border.all(
-                color:Color.fromRGBO(235, 132, 0, 1)
-              ),
-              borderRadius: BorderRadius.circular(12)
-             ),
-            width: 300,
-            height: 100,
-            child: ListTile(
+        //     Card(
+        //        shadowColor:Color.fromRGBO(192, 192, 192, 0.5),
+        //       margin: EdgeInsets.all(20),
+        //       shape:RoundedRectangleBorder(
+        //          borderRadius:BorderRadius.circular(12)
+        //       ), 
+        //     color: Color.fromRGBO(7, 14, 32, 0.9),
+        // child:InkWell(
+        //      splashColor: Colors.amber.withAlpha(50),
+        // onTap: () {
+        //     print('Card tapped.');
+        // },
+        // child: Container(
+        //      margin: EdgeInsets.all(20),
+        //      decoration: BoxDecoration(
+        //       border: Border.all(
+        //         color:Color.fromRGBO(235, 132, 0, 1)
+        //       ),
+        //       borderRadius: BorderRadius.circular(12)
+        //      ),
+        //     width: 300,
+        //     height: 100,
+        //     child: ListTile(
                 
-               leading:Icon(Icons.assessment,color:Color.fromRGBO(235, 132, 0, 1),size:30),
-               subtitle: Text("Job History",style:TextStyle(color:Color.fromRGBO(235, 132, 0, 1),fontSize:20)),
-            ),
-        ),
+        //        leading:Icon(Icons.assessment,color:Color.fromRGBO(235, 132, 0, 1),size:30),
+        //        subtitle: Text("Job History",style:TextStyle(color:Color.fromRGBO(235, 132, 0, 1),fontSize:20)),
+        //     ),
+        // ),
       
-        )
-           ),
-            Card(
-               shadowColor:Color.fromRGBO(192, 192, 192, 0.5),
-              margin: EdgeInsets.all(20),
-              shape:RoundedRectangleBorder(
-                 borderRadius:BorderRadius.circular(12)
-              ), 
-            color: Color.fromRGBO(7, 14, 32, 0.9),
-        child:InkWell(
-             splashColor: Colors.amber.withAlpha(50),
-        onTap: () {
-            print('Card tapped.');
-        },
-        child: Container(
-             margin: EdgeInsets.all(20),
-             decoration: BoxDecoration(
-              border: Border.all(
-                color:Color.fromRGBO(235, 132, 0, 1)
-              ),
-              borderRadius: BorderRadius.circular(12)
-             ),
-            width: 300,
-            height: 100,
-            child: ListTile(
+        // )
+        //    ),
+        //     Card(
+        //        shadowColor:Color.fromRGBO(192, 192, 192, 0.5),
+        //       margin: EdgeInsets.all(20),
+        //       shape:RoundedRectangleBorder(
+        //          borderRadius:BorderRadius.circular(12)
+        //       ), 
+        //     color: Color.fromRGBO(7, 14, 32, 0.9),
+        // child:InkWell(
+        //      splashColor: Colors.amber.withAlpha(50),
+        // onTap: () {
+        //     print('Card tapped.');
+        // },
+        // child: Container(
+        //      margin: EdgeInsets.all(20),
+        //      decoration: BoxDecoration(
+        //       border: Border.all(
+        //         color:Color.fromRGBO(235, 132, 0, 1)
+        //       ),
+        //       borderRadius: BorderRadius.circular(12)
+        //      ),
+        //     width: 300,
+        //     height: 100,
+        //     child: ListTile(
                 
-               leading:Icon(Icons.assignment,color:Color.fromRGBO(235, 132, 0, 1),size:30),
-               subtitle: Text("My Services",style:TextStyle(color:Color.fromRGBO(235, 132, 0, 1),fontSize:20)),
-            ),
-        ),
+        //        leading:Icon(Icons.assignment,color:Color.fromRGBO(235, 132, 0, 1),size:30),
+        //        subtitle: Text("My Services",style:TextStyle(color:Color.fromRGBO(235, 132, 0, 1),fontSize:20)),
+        //     ),
+        // ),
       
-        )
-           ),
+        // )
+        //    ),
            ],
                  
          )
