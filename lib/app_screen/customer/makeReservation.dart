@@ -63,7 +63,9 @@ class _MakeReservationState extends State<MakeReservation> {
   Widget build(BuildContext context) {
     return Scaffold(
            
-          appBar: AppBar(title:Text(" MAKE  RESERVATION ")),
+          appBar: AppBar(title:Text(" MAKE  RESERVATION "),
+             
+          ),
           body: Padding(
                padding: EdgeInsets.all(30),
                       child: Container(
@@ -87,6 +89,7 @@ class _MakeReservationState extends State<MakeReservation> {
              ),
         ),
                          ),
+                         
                           SizedBox(height:10),
                         Text("Choose a Date",style: TextStyle(fontSize:20.0,color:Colors.grey),),
                         SizedBox(height:10),

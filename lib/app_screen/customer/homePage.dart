@@ -1,5 +1,6 @@
 
 import 'package:automosoft_mobile/app_auth/loginPage.dart';
+import 'package:automosoft_mobile/app_screen/customer/availableDateAndTime.dart';
 import 'package:automosoft_mobile/app_screen/customer/jobHistory.dart';
 import 'package:automosoft_mobile/app_screen/customer/makeReservation.dart';
 import 'package:automosoft_mobile/app_screen/customer/myServices.dart';
@@ -27,7 +28,14 @@ class _CustomerHomeState extends State<CustomerHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-           appBar: AppBar(),
+           appBar: AppBar(
+             elevation: 10.0,
+             actions: <Widget>[
+               IconButton(icon: Icon(Icons.event), onPressed:(){
+                   Navigator.push(context, MaterialPageRoute(builder: (context)=>AvailableDateAndTime()));
+               })
+             ],
+           ),
       drawer: Drawer(
         
         child:ListView(
@@ -57,10 +65,10 @@ class _CustomerHomeState extends State<CustomerHome> {
 
                       ),
                        ListTile(
-                      leading: Icon(Icons.event_available),
+                      leading: Icon(Icons.event),
                       title:Text("Available Date and Time",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                        onTap:(){
-
+                           Navigator.push(context,MaterialPageRoute(builder: (context)=>AvailableDateAndTime()));
                        },
 
                       ),

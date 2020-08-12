@@ -30,6 +30,8 @@ dependencies:
   email_validator: ^1.0.4
   grouped_buttons: ^1.0.4
   intl: ^0.16.1
+  flutter_material_pickers: ^1.7.1
+  flutter_clean_calendar: ^1.0.2+1
 
   
 
