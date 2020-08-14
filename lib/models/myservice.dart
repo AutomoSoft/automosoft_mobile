@@ -1,6 +1,8 @@
 
 import 'dart:convert';
 
+import 'package:automosoft_mobile/models/items.dart';
+
 
 List<Services>modelServiceFromJson(String str)=>
 List<Services>.from(json.decode(str).map((x)=>Services.fromJson(x)));
@@ -15,7 +17,6 @@ class Services{
   String  problem;
   String  foremanOb;
   String estCharge;
-  Item items;
   Tech techs;
   String subTotal;
   String tax;
@@ -32,7 +33,6 @@ class Services{
     this.problem,
     this.foremanOb,
     this.estCharge,
-    this.items,
     this.techs,
     this.subTotal,
     this.tax,
@@ -43,7 +43,10 @@ class Services{
     this.lastPaidOn,
     this.custId,
   });
-  factory Services.fromJson(Map<String,dynamic> json)=>Services(
+  factory Services.fromJson(Map<String,dynamic> json){
+   
+    return
+    Services(
     jobNo: json['jobNo'],
     jobType: json['jobType'],
     jobStatus: json['jobStatus'],
@@ -58,11 +61,12 @@ class Services{
     lastPaidOn: json['lastpaymentdate'].toString(),
     balance: json['balance'].toString(),
  vehicle: Vehicles.fromJson(jsonDecode(json['vehicle'])),
-   //techs: Tech.fromJson(json['technicians']),
-  // items: Item.fromJson(json['itemsUsed']),
+
+
 
  
   );
+  }
   Map<String,dynamic> toJson()=>{
     'jobNo':jobNo,
     'jobType':jobType,
@@ -70,7 +74,6 @@ class Services{
     'problem':problem,
     'foremanOb':foremanOb,
     'estCharge':estCharge,
-    'items':items.toJson(),
     'techs':techs.toJson(),
     'subTotal':subTotal,
     'tax':tax,
@@ -114,7 +117,7 @@ class Tech{
       this.addedDate,
     }
   );
-  factory Tech.fromJson(Map<String,dynamic> json)=>Tech(
+  factory Tech.fromJson(List<dynamic> json)=>Tech(
     techId: json[0],
     addedDate: json[1],
   );
@@ -123,37 +126,16 @@ class Tech{
      'addedDate':addedDate,
   };
 }
-class Item{
-  String itemId;
-  String itemName;
-  String itemType;
-  String qut;
-  String unitPrice;
-  String charge;
-  Item({
-    this.itemId,
-    this.itemName,
-    this.itemType,
-    this.qut,
-    this.unitPrice,
-    this.charge,
-  });
 
-  factory Item.fromJson(Map<List<String>,dynamic> json)=>Item(
-    itemId:json['itemId'],
-    itemName: json['itemname'],
-    itemType: json['itemtype'],
-    unitPrice: json['unitprice'],
-    qut:json['qty'],
-    charge: json['charge'],
-  );
-
-  Map<String,dynamic> toJson()=>{
-    'itemId':itemId,
-    'itemName':itemName,
-    'itemType':itemType,
-    'unitPrice':unitPrice,
-     'qut':qut,
-     'charge':charge,
-  };
-}
+// class ItemList{
+//   final List<Item> items;
+ 
+//   ItemList({
+//     this.items
+//   });
+//   factory ItemList.fromJosn(List<dynamic> parsedJson){
+//     List<Item>items=List<Item>();
+//     items=parsedJson.map((i)=>Item.fromJson(i)).toList();
+//     return ItemList(items: items);
+//   }
+// }
