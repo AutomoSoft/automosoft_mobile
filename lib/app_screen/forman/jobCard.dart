@@ -66,7 +66,7 @@ class _JobCardState extends State<JobCard> {
       
           userids.clear();
       for (var i in userData){
-        print(i);
+       // print(i);
         userids.add(i['userid']);        
       }
       
@@ -81,6 +81,28 @@ class _JobCardState extends State<JobCard> {
 
 }
 /*.................................*/
+  Future<void> getLastjobNumber() async{
+
+    await http.get('http://${Ip.ip}:3000/getLastId/getLastJobNo')
+    .then((res){
+          var data=jsonDecode(res.body);
+          print(data['data'][0]['jobNo']);
+          String lastjobNo=data['data'][0]['jobNo'];
+          String lastnum=lastjobNo.substring(5);
+          int newNumber=1+(int.parse(lastnum));
+          String newJobNo="JOB00$newNumber";
+          print(newJobNo);
+          jobNo.text=newJobNo;
+    }
+    
+    )
+    .catchError((onError){
+      print(onError);
+    });
+
+  }
+
+/*.....................................*/
 // ignore: missing_return
 Future<List<Technician>> fetchTech(String jobtype) async{
     final resbody=await http.get('http://${Ip.ip}:3000/mobile/getTechnicians/$jobtype')
@@ -137,6 +159,7 @@ Future<List<Technician>> fetchTech(String jobtype) async{
      void initState() { 
        super.initState();
        fetchCustomerid();
+       getLastjobNumber();
       
       
        _selectday=DateTime.now();
@@ -177,6 +200,7 @@ Future<List<Technician>> fetchTech(String jobtype) async{
                   ),
                 
                   TextFormField(
+                      readOnly: true,
                          controller: jobNo,
                     validator: (value){
                       if(value.isEmpty ||value.trim()==""){
@@ -413,12 +437,12 @@ Future<List<Technician>> fetchTech(String jobtype) async{
    
  /*...............................submit data .........................................*/    
   Future<void> submit() async{
-    final addTechnicians=[];
+    List<List<String>> addTechnicians=[];
      addTechnicians.clear();
      if(_formKey.currentState.validate()){
     for(var i in techIndex){
      
-      addTechnicians.add([listModel[i].userid ,_selectday]);
+      addTechnicians.add([listModel[i].userid ,_selectday.toString()]);
     //  print(jsonEncode( addTechnicians));
     }
     
@@ -429,21 +453,21 @@ Future<List<Technician>> fetchTech(String jobtype) async{
       vehicleDetails='{"vehicleRegNo": "${vehicleModel[vehicleIndexe].vehicleRegNo}","chasis:"${vehicleModel[vehicleIndexe].chasis}","EngineNo":"${vehicleModel[vehicleIndexe].engineNo}"}';
     //  print(vehicleDetails);
     
-    Map<String, dynamic> data={
+    Map<dynamic, dynamic> data={
           "jobNo":jobNo.text,
            "jobType":jobtype,
             "custId": customer,
            "vehicle":vehicleDetails,
             "probCus":problemReport.text,
             "foremanObv":foremanObser.text,
-            "technicians":addTechnicians,
+             "technicians":addTechnicians,
             "addedby":foremanId,
             "addedon":DateFormat('EEE MMM  d '  'yyyy  ').format(_selectday),
              "lastmodifiedby":"Never Modified",
              "lastmodifiedon":DateFormat('EEE MMM  d '  'yyyy  ').format(_selectday).toString(),
              "estCharge":serviceChage.text,
              "jobStatus":"Queued",
-
+              
     };
      print(data);
     return await http.post("http://${Ip.ip}:3000/jobs/addNewJob",body:data)
