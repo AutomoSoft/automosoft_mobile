@@ -14,7 +14,8 @@ import 'package:intl/intl.dart';
  class EventDate{
   String date;
    String time;
-    EventDate({this.date,this.time});
+   String status;
+    EventDate({this.date,this.time,this.status});
 
 
 
@@ -25,11 +26,13 @@ import 'package:intl/intl.dart';
     EventDate(
       date:json['daterequested'],
       time:json['time'],
+      status: json['status'],
      );
 
      Map<String, dynamic> toJson()=>{
       'date':date,
       'time':time,
+      'status':status,
   };
 
  }

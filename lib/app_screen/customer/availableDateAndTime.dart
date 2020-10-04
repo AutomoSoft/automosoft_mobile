@@ -16,8 +16,9 @@ class AvailableDateAndTime extends StatefulWidget {
 }
 
 class _AvailableDateAndTime extends State<AvailableDateAndTime> {
-
+ List<String>date;
   List<EventDate> eventModel=[];
+ // Map<DateTime,List<dynamic>> eventModels;
    Map<DateTime, List> event={};
   void _handleNewDate(date) {
     setState(() {
@@ -32,6 +33,7 @@ class _AvailableDateAndTime extends State<AvailableDateAndTime> {
     .then((res) {
       var userData =json.decode(res.body);
      // print(userData['data'][0]['daterequested']);
+        eventModel.clear();
        setState(() {
           for(Map i in userData['data']){
            // print(i);
@@ -42,13 +44,15 @@ class _AvailableDateAndTime extends State<AvailableDateAndTime> {
     //  print(eventModel[0].date);
       // var event=Map.fromIterable(eventModel,key:(e)=>e.date,value:(e)=>[e.time]);
       // print(event);
-       for(var i =0; i<eventModel.length; i++){
-         //print(eventModel[i].date);
-        //  print(eventModel[i].date.substring(0,3));//day
-        //  print(eventModel[i].date.substring(4,7));//month
+       for(var i =0; i<(eventModel.length); i++){
+        // print(eventModel.length);
+      //  print(("$i :${eventModel[i].date}"));
+        // print(eventModel[i].date.substring(0,3));//day
+         // print(eventModel[i].date.substring(4,7));//month
         //  print(eventModel[i].date.substring(8,10));//day int
         //  print(eventModel[i].date.substring(11,15));//year
-         switch (eventModel[i].date.substring(4,7)) {
+          if(eventModel[i].date.length!=null){
+         switch ((eventModel[i].date).substring(4,7)) {
            case 'Jan':
                 eventModel[i].date="${eventModel[i].date.substring(11,15)}, 01, ${eventModel[i].date.substring(8,10)}";
              
@@ -98,20 +102,52 @@ class _AvailableDateAndTime extends State<AvailableDateAndTime> {
              
              break;
            default:
+            print("ffffff");
          }
        }
+       }
        DateFormat dateFormat = DateFormat("yyyy, MM, dd");
+      
       for(var i =0; i<eventModel.length; i++){
-        print(dateFormat.parse(eventModel[i].date));
-        
-        print(DateTime.now());
+        if(eventModel[i].date.length!=null){
+          
+        }
+        // print( "eventModel[$i]: ${dateFormat.parse(eventModel[i].date)}");
       }
-      event=Map.fromIterable(eventModel, key:(e)=> dateFormat.parse(e.date),value:(e)=>[{"name":"Not Available ${e.time}","isDone":false}]);
-     
+    
+      event=Map.fromIterable(eventModel, key:(e)=> dateFormat.parse(e.date),value:(e)=>[{"name":"${e.status!=null?e.status:"__"} time ${e.time}","isDone":false}]);
+          
+    
+     //event =Map.fromIterable(eventModel, key:(e)=>dateFormat.parse(e.date),value:(e)=>{})
   
-    //   print("____________________________________________________");
-    //  // print(event);
-    //  // print(DateFor)
+      print("____________________________________________________");
+    //   for(var i =0; i<eventModel.length; i++){
+    //     if(eventModel[i].date.length!=null){
+          
+    //     }
+      
+    //  event[dateFormat.parse(eventModel[i].date)].forEach((element) {
+    //   // print("${eventModel[i].status!=null?eventModel[i].status:"__"} time ${eventModel[i].time}");
+    //    if(element['name']!="${eventModel[i].status!=null?eventModel[i].status:"__"} time ${eventModel[i].time}"){
+    //      print('${element["name"]}:false');
+    //      print(eventModel[i].time);
+    //      print(eventModel[i].date);
+    //   event.update(dateFormat.parse(eventModel[i].date), (value) =>value.join());
+
+    //    }
+    //  });
+     
+    //   }
+      
+        // if(event.containsKey(dateFormat.parse(eventModel[0].date))){
+        // //        event.values.forEach((element) {
+        // //   print(element[0]['name']);
+        // //  });
+      
+       
+      
+    // print(event);
+     //print(DateFor)
     }
            
     )
@@ -149,7 +185,7 @@ class _AvailableDateAndTime extends State<AvailableDateAndTime> {
                 isExpandable: true,
                 selectedColor: Colors.black,
                 todayColor: Colors.pink,
-                eventColor: Colors.red,
+                eventColor:Colors.red,
                 dayOfWeekStyle: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w800,

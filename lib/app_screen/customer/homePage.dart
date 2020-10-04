@@ -1,7 +1,7 @@
 
 import 'package:automosoft_mobile/app_auth/loginPage.dart';
 import 'package:automosoft_mobile/app_screen/customer/availableDateAndTime.dart';
-import 'package:automosoft_mobile/app_screen/customer/jobHistory.dart';
+import 'package:automosoft_mobile/app_screen/customer/myReservation.dart';
 import 'package:automosoft_mobile/app_screen/customer/makeReservation.dart';
 import 'package:automosoft_mobile/app_screen/customer/myServices.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +82,7 @@ class _CustomerHomeState extends State<CustomerHome> {
                       ),
                       ListTile(
                       leading: Icon(Icons.assessment),
-                      title:Text("Job History",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                      title:Text("My Reservations",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                        onTap:(){
                          _jobHistory();
                        },
@@ -169,7 +169,7 @@ class _CustomerHomeState extends State<CustomerHome> {
             child: ListTile(
                 
                leading:Icon(Icons.assessment,color:Color.fromRGBO(235, 132, 0, 1),size:30),
-               subtitle: Text("Job History",style:TextStyle(color:Color.fromRGBO(235, 132, 0, 1),fontSize:20)),
+               subtitle: Text("My Reservations",style:TextStyle(color:Color.fromRGBO(235, 132, 0, 1),fontSize:20)),
             ),
         ),
       
@@ -220,7 +220,7 @@ class _CustomerHomeState extends State<CustomerHome> {
     await Navigator.push(context,MaterialPageRoute(builder: (context)=> MakeReservation(userId:userid) ),);
  }
   _jobHistory()async{
-    await Navigator.push(context, MaterialPageRoute(builder: (context)=>JobHistory(userId:userid,)));
+    await Navigator.push(context, MaterialPageRoute(builder: (context)=>MyReservation(userId:userid,)));
   }
   _myServices()async{
     await Navigator.push(context, MaterialPageRoute(builder: (context)=>MyServices(userId: userid,)));
