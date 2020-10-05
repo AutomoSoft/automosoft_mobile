@@ -48,7 +48,8 @@ class _MakeReservationState extends State<MakeReservation> {
                         if(newDateTime!=null){
                           setState(() {
                             _selectday=newDateTime;
-                            selectday=DateFormat('EEE MMM d '  'yyyy').format(_selectday);
+                            selectday=DateFormat('EEE MMM dd '  'yyyy').format(_selectday);
+                            print(selectday);
                           });
                         }
      }
