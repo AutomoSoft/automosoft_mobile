@@ -21,15 +21,38 @@ class _MyReservationState extends State<MyReservation> {
   bool _notloading=true;
  List<MyReservations> myReservationModel=[];
    String jobtype;
-  var jobType=["Paint Job","Accident Repair","Vehicle Valuation","Full Service","Other"];
+  var jobType=["Paint Job","Accident Repair","Vehicle Valuation","Full Service","Other","All"];
   _MyReservationState(String userId){
        userid=userId;
   }
   Future<List<MyReservations>> myResrvation({value="all"}) async{
     print(value);
-  
-     var reservationModels=List<MyReservations>();
-     if(value!='all'){
+        var reservationModels=List<MyReservations>();
+      if(value=="All"){
+              await http.get('http://${Ip.ip}:3000/reservations/getReservations/all')
+    .then((res) {
+       myReservationModel.clear();
+      var data=json.decode(res.body);
+     var myServisers=data['data'];
+     setState(() {
+         _notloading=false;
+       });
+   
+     for(var i in myServisers){
+
+      myReservationModel.add(MyReservations.fromJson(i));
+     }
+
+
+    }).catchError((onError){
+      print(onError);
+    });
+    return myReservationModel;
+   
+      }
+ 
+     else if(value!='all'){
+         
           await http.get('http://${Ip.ip}:3000/reservations/getReservations/$value')
     .then((res) {
        myReservationModel.clear();
@@ -51,6 +74,7 @@ class _MyReservationState extends State<MyReservation> {
     return myReservationModel;
    
      }
+   
      else{
 
     await http.get('http://${Ip.ip}:3000/reservations/getReservations/$value')
@@ -106,27 +130,32 @@ class _MyReservationState extends State<MyReservation> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
            children:<Widget>[
-             Text("Select Job Type",style:TextStyle(fontSize:20)),
-            DropdownButton<String>(
-                             elevation: 20,
-                              isExpanded: true, 
-                              items:jobType.map((item){
-                                 return DropdownMenuItem<String>(
-                                    child:Text(item),
-                                    value:item,
-                                 );
-                              }).toList(),
-                               onChanged:(String newValue){
-                                  setState(() {
-                                      this.jobtype=newValue;
-                                      setState(() {
-                                        _notloading=true;
-                                      });
-                                      myResrvation(value:newValue);
-                                  });
-                               },
-                               value:jobtype,
-                               ),
+             Text("Select Job Type",style:TextStyle(fontSize:20,color:Color.fromRGBO(4, 45, 51, 1))),
+            Container(
+              color:Colors.grey[200],
+              child: DropdownButton<String>(
+                               elevation: 20,
+                                isExpanded: true, 
+                                dropdownColor: Colors.grey[200],
+                                hint: Text("Select Job Type"),
+                                items:jobType.map((item){
+                                   return DropdownMenuItem<String>(
+                                      child:Text(item),
+                                      value:item,
+                                   );
+                                }).toList(),
+                                 onChanged:(String newValue){
+                                    setState(() {
+                                        this.jobtype=newValue;
+                                        setState(() {
+                                          _notloading=true;
+                                        });
+                                        myResrvation(value:newValue);
+                                    });
+                                 },
+                                 value:jobtype,
+                                 ),
+            ),
                                Expanded(
                                  child:Padding(
                                    padding: const EdgeInsets.only(top:20.0),
@@ -134,12 +163,14 @@ class _MyReservationState extends State<MyReservation> {
                                      children:<Widget>[
                                          SingleChildScrollView(
                                            scrollDirection: Axis.horizontal,
-                                                                           child: DataTable(
+                                                                           child: Container(
+                                                                                color:Colors.grey[200],
+                                                                             child: DataTable(
                                              columns: const <DataColumn>[
         DataColumn(
           label: Text(
             'JOB TYPE',
-            style: TextStyle(fontStyle: FontStyle.italic,color:Colors.black,fontSize:15),
+            style: TextStyle(fontStyle: FontStyle.italic,color:Color.fromRGBO(18, 144, 163, 1),fontSize:18),
           ),
         ),
        
@@ -147,29 +178,29 @@ class _MyReservationState extends State<MyReservation> {
         DataColumn(
           label: Text(
             'REQUESTED DATE',
-            style: TextStyle(fontStyle: FontStyle.italic,color:Colors.black,fontSize:15),
+            style: TextStyle(fontStyle: FontStyle.italic,color:Color.fromRGBO(18, 144, 163, 1),fontSize:18),
           ),
         ),
         DataColumn(
           label: Text(
             'REQUESTED TIME',
-            style: TextStyle(fontStyle: FontStyle.italic,color:Colors.black,fontSize:15),
+            style: TextStyle(fontStyle: FontStyle.italic,color:Color.fromRGBO(18, 144, 163, 1),fontSize:18),
           ),
         ),
         DataColumn(
           label: Text(
             'PROBLEM DESCRIPTION',
-            style: TextStyle(fontStyle: FontStyle.italic,color:Colors.black,fontSize:15),
+            style: TextStyle(fontStyle: FontStyle.italic,color:Color.fromRGBO(18, 144, 163, 1),fontSize:18),
           ),
         ),
          DataColumn(
           label: Text(
             'ACCEPTED ON',
-            style:TextStyle(fontStyle: FontStyle.italic,color:Colors.black,fontSize:15),
+            style:TextStyle(fontStyle: FontStyle.italic,color:Color.fromRGBO(18, 144, 163, 1),fontSize:18),
           ),
         ),
       ],
-     
+      
     
       rows:myReservationModel.map((e) => 
          DataRow(
@@ -177,19 +208,19 @@ class _MyReservationState extends State<MyReservation> {
            cells: [
              DataCell(
                  
-                 Text(e.jobtype==null?"":e.jobtype)
+                 Text(e.jobtype==null?"":e.jobtype, style: TextStyle(color:Color.fromRGBO(11, 24, 74, 1),fontSize:17),)
              ),
                DataCell(
-                 Text(e.reqDate==null?"":e.reqDate)
+                 Text(e.reqDate==null?"":e.reqDate, style: TextStyle(color:Color.fromRGBO(11, 24, 74, 1),fontSize:15))
              ),
                DataCell(
-                 Text(e.reqTime==null?"":e.reqTime)
+                 Text(e.reqTime==null?"":e.reqTime, style: TextStyle(color:Color.fromRGBO(11, 24, 74, 1),fontSize:15))
              ),
                DataCell(
-                 Text(e.prob==null?"":e.prob)
+                 Text(e.prob==null?"":e.prob, style: TextStyle(color:Color.fromRGBO(11, 24, 74, 1),fontSize:17))
              ),
                DataCell(
-                 Text(e.accptedOn==null?"":e.accptedOn)
+                 Text(e.accptedOn==null?"":e.accptedOn, style: TextStyle(color:Color.fromRGBO(11, 24, 74, 1),fontSize:17))
              ),
            ]
            )
@@ -197,6 +228,7 @@ class _MyReservationState extends State<MyReservation> {
       
                                           
                                               ),
+                                                                           ),
                                          )
                                      ]
                                    ),
