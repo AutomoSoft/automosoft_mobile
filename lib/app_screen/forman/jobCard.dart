@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:automosoft_mobile/constant.dart';
 import 'package:automosoft_mobile/models/technician.dart';
 import 'package:automosoft_mobile/models/vehicaleDetails.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_date_picker/rounded_picker.dart';
@@ -169,7 +170,8 @@ Future<List<Technician>> fetchTech(String jobtype) async{
 /*........................................................................*/
      @override
      Widget build(BuildContext context) {
-       return Container(
+       return 
+       Container(
          
           child: Form(
              key: _formKey,
@@ -437,23 +439,27 @@ Future<List<Technician>> fetchTech(String jobtype) async{
    
  /*...............................submit data .........................................*/    
   Future<void> submit() async{
-    List<List<String>> addTechnicians=[];
+    List<dynamic> addTechnicians=[];
+    
      addTechnicians.clear();
      if(_formKey.currentState.validate()){
     for(var i in techIndex){
-     
+     print(i);
       addTechnicians.add([listModel[i].userid ,_selectday.toString()]);
     //  print(jsonEncode( addTechnicians));
     }
+   
     
    
     
-   print(addTechnicians);
+   print(addTechnicians.length);
         
-      vehicleDetails='{"vehicleRegNo": "${vehicleModel[vehicleIndexe].vehicleRegNo}","chasis:"${vehicleModel[vehicleIndexe].chasis}","EngineNo":"${vehicleModel[vehicleIndexe].engineNo}"}';
+      vehicleDetails='{"vehicleRegNo":"${vehicleModel[vehicleIndexe].vehicleRegNo}","chasis" :"${vehicleModel[vehicleIndexe].chasis}","EngineNo":"${vehicleModel[vehicleIndexe].engineNo}"}';
     //  print(vehicleDetails);
+   
     
-    Map<dynamic, dynamic> data={
+    
+    Map body={
           "jobNo":jobNo.text,
            "jobType":jobtype,
             "custId": customer,
@@ -469,25 +475,27 @@ Future<List<Technician>> fetchTech(String jobtype) async{
              "jobStatus":"Queued",
               
     };
-     print(data);
-    return await http.post("http://${Ip.ip}:3000/jobs/addNewJob",body:data)
+    Response response;
+     Dio dio = new Dio();
+     //await http.post("http://${Ip.ip}:3000/jobs/addNewJob",body:data)
+     await dio.post("http://${Ip.ip}:3000/jobs/addNewJob", data:body)
     .then((value){
-        var data=json.decode(value.body);
-         
+        var datas=value.data;
+         print(datas);
            final snackBar = SnackBar(
            content: SizedBox(
              height: 50,
-             child:data['state']?Text("${data["msg"]}",style:TextStyle(fontSize:20),)
-             :Text("${data["msg"]}\n check Job No ",style:TextStyle(fontSize:20,color:Colors.red),),
+             child:datas['state']?Text("${datas["msg"]}",style:TextStyle(fontSize:20),)
+             :Text("${datas["msg"]}\n check Job No ",style:TextStyle(fontSize:20,color:Colors.red),),
            ),
              action: SnackBarAction(
-               textColor:data['state']?Colors.amber:Colors.red,
+               textColor:datas['state']?Colors.amber:Colors.red,
              label: 'ok',
            onPressed: () {},
   ),
 );
               Scaffold.of(context).showSnackBar(snackBar);
-   if(data['state']){
+   if(datas['state']){
       //  jobNo.text="";
       // problemReport.text="";
       // foremanObser.text="";

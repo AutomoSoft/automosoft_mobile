@@ -18,7 +18,7 @@ class MyReservation extends StatefulWidget {
 
 class _MyReservationState extends State<MyReservation> {
   String userid;
- 
+  bool _notloading=true;
  List<MyReservations> myReservationModel=[];
    String jobtype;
   var jobType=["Paint Job","Accident Repair","Vehicle Valuation","Full Service","Other"];
@@ -27,15 +27,41 @@ class _MyReservationState extends State<MyReservation> {
   }
   Future<List<MyReservations>> myResrvation({value="all"}) async{
     print(value);
+  
      var reservationModels=List<MyReservations>();
-     
+     if(value!='all'){
+          await http.get('http://${Ip.ip}:3000/reservations/getReservations/$value')
+    .then((res) {
+       myReservationModel.clear();
+      var data=json.decode(res.body);
+     var myServisers=data['data'];
+     setState(() {
+         _notloading=false;
+       });
+   
+     for(var i in myServisers){
+
+      myReservationModel.add(MyReservations.fromJson(i));
+     }
+
+
+    }).catchError((onError){
+      print(onError);
+    });
+    return myReservationModel;
+   
+     }
+     else{
 
     await http.get('http://${Ip.ip}:3000/reservations/getReservations/$value')
     .then((res) {
        reservationModels.clear();
       var data=json.decode(res.body);
      var myServisers=data['data'];
-      print(myServisers);
+       setState(() {
+         _notloading=false;
+       });
+   
      for(var i in myServisers){
 
        reservationModels.add(MyReservations.fromJson(i));
@@ -46,6 +72,7 @@ class _MyReservationState extends State<MyReservation> {
       print(onError);
     });
     return reservationModels;
+     }
   }
    @override
   void initState() { 
@@ -65,11 +92,21 @@ class _MyReservationState extends State<MyReservation> {
     return Scaffold(
       appBar: AppBar(title: Text('My Reservations'),),
 
-      body:Padding(
+      body:_notloading ? Center(
+        child: CircularProgressIndicator(
+                              value: null,
+                              strokeWidth: 5.0,
+                            ),
+      )
+      :
+      
+      
+      
+      Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
            children:<Widget>[
-             Text("Select Job Type"),
+             Text("Select Job Type",style:TextStyle(fontSize:20)),
             DropdownButton<String>(
                              elevation: 20,
                               isExpanded: true, 
@@ -82,6 +119,9 @@ class _MyReservationState extends State<MyReservation> {
                                onChanged:(String newValue){
                                   setState(() {
                                       this.jobtype=newValue;
+                                      setState(() {
+                                        _notloading=true;
+                                      });
                                       myResrvation(value:newValue);
                                   });
                                },

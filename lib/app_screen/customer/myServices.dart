@@ -92,7 +92,7 @@ class _MyServicesState extends State<MyServices> {
       body:_notloading ? Center(
         child: CircularProgressIndicator(
                               value: null,
-                              strokeWidth: 7.0,
+                              strokeWidth: 5.0,
                             ),
       )
       :Container(
